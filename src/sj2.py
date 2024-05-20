@@ -11,15 +11,23 @@ from scipy.signal import find_peaks
 # Current directory
 current_directory = os.path.dirname(__file__)
 # Directory containing XML files
-xml_directory = os.path.join(current_directory, '..','dat', 'HY202103','D07', '20190715_190855')
+xml_directory = os.path.join(current_directory, '..', 'dat', 'HY202103', 'D07', '20190715_190855')
+# Directory to save results (CSV and PNG files)
+output_directory = os.path.join(current_directory, '..', 'res', 'HY202103', 'D07', '20190715_190855')
+
+# Ensure the output directory exists
+os.makedirs(output_directory, exist_ok=True)
+
+# Path to the CSV file
+csv_file_path = os.path.join(output_directory, f'{output_directory}.csv')
 
 # Clear existing content of the CSV file
-open('AnalysisResult_A2.csv', 'w').close()
+open(csv_file_path, 'w').close()
 
 # Parse XML files in the directory
 for filename in os.listdir(xml_directory):
-    if filename.startswith('HY202103_D07_') and filename.endswith('_LION1_DCM_LMZC.xml'):
-        print ('---',filename,'---')
+    if filename.endswith('LMZC.xml') or filename.endswith('LMZO.xml'):
+        print('---', filename, '---')
         # Parse XML file and get the root element
         xml_file_path = os.path.join(xml_directory, filename)
         tree = elemTree.parse(xml_file_path)
@@ -78,8 +86,7 @@ for filename in os.listdir(xml_directory):
         axs[1, 0].set_xlabel('Voltage (V)')
         axs[1, 0].grid(True)
         axs[1, 0].legend(loc='upper left')
-        axs[1, 0].text(-1.9, 10 ** -6,
-                       f'  R²: {R_squared}\n-2V: {current_values[0]:.2e}\n-1V: {current_values[4]:.2e} \n 1V: {current_values[12]:.2e}', fontsize=10, horizontalalignment='left', verticalalignment='center')
+        axs[1, 0].text(-1.9, 10 ** -6, f'R²: {R_squared}\n-2V: {current_values[0]:.2e}\n-1V: {current_values[4]:.2e} \n 1V: {current_values[12]:.2e}', fontsize=10, horizontalalignment='left', verticalalignment='center')
 
         ref_transmission_point = -50
         # Second subplot: Transmission vs Wavelength
@@ -297,18 +304,19 @@ for filename in os.listdir(xml_directory):
                 data_dict['I at 1V [A]'].append('{:.4e}'.format(float(current)))
                 # Add the graph image file name to the dictionary
 
-        # Path to the directory containing CSV and PNG files
-        file_directory = os.path.dirname(os.path.abspath(__file__))
+        filename = filename.replace('.xml', '')
+        # Save the figure as an image in the output directory
+        image_filename = f'{filename}.png'
+        image_path = os.path.join(output_directory, image_filename)
 
         # 백슬래시로 생성된 파일 경로
-        file_path = os.path.join(file_directory, filename)
+        file_path = os.path.join(output_directory, image_filename)
 
         # 파일 이름에서 .xml 확장자 제거
         filename_no_ext, _ = os.path.splitext(filename)
 
         # 백슬래시를 슬래시로 변환
         file_path = file_path.replace('\\', '/')
-        file_path = file_path.replace('.xml', '.png')
 
         # 하이퍼링크에 슬래시로 된 파일 경로 추가
         data_dict['Graph Image'].append(f'=HYPERLINK("{file_path}", "{filename_no_ext}")')
@@ -319,15 +327,17 @@ for filename in os.listdir(xml_directory):
         # Print the result
         pd.set_option('display.max_columns', None)
 
-        # Append data to the existing CSV file
-        with open('AnalysisResult_A2.csv', 'a', newline='') as f:
-            df.to_csv(f, index=False, header=f.tell() == 0)  # Header is written only if file is empty
-        filename = filename.replace('.xml', '')
+        # Append data to the existing CSV file with UTF-8 encoding
+        with open(csv_file_path, 'a', newline='', encoding='utf-8') as f:
+            df.to_csv(f, mode='a', header=not os.path.exists(csv_file_path), index=False)
+
         # Adjust layout to prevent overlap
         plt.suptitle(filename)
         plt.tight_layout()
         plt.subplots_adjust(hspace=0.3)
         axs[1, 1].axis('off')
         axs[1, 2].axis('off')
-        # Save the figure as an image
-        plt.savefig(f'{filename}.png', dpi=300, bbox_inches='tight')
+
+        # Save the figure as an image in the output directory
+        plt.savefig(image_path, dpi=300, bbox_inches='tight')
+        plt.close(fig)  # Close the figure to free up memory
