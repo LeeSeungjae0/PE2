@@ -1,4 +1,3 @@
-
 import os
 import sys
 from sj3 import process_xml_files
