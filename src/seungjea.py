@@ -11,7 +11,7 @@ from scipy.signal import find_peaks
 # Current directory
 current_directory = os.path.dirname(__file__)
 # Directory containing XML files
-xml_directory = os.path.join(current_directory, '..','dat', 'HY202103','D07', '20190715_190855')
+xml_directory = os.path.join(current_directory, '..','HY202103','D07', '20190715_190855')
 
 # Clear existing content of the CSV file
 open('AnalysisResult_A2.csv', 'w').close()

@@ -27,3 +27,6 @@ This section provides a step-by-step guide on how to use the program. It include
 3. **Running the Program**: Steps on how to start and run the program.
 4. **Usage Instructions**: Detailed instructions on how to use the various features and functions of the program.
 5. **Troubleshooting**: Common issues and their solutions, FAQs, or where to find help and support.
+
+csv파일을 엑셀로 직접 열 경우 하이퍼링크 작동 X
+엑셀에서 csv데이터를 불러와야 제대로 작동

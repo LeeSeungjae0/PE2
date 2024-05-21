@@ -195,9 +195,6 @@ def process_xml_files(directory1, directory2, current_directory):
             max_transmission_wavelength = 1550
             max_transmission_wavelength2 = 1565
             for i, wavelengthsweep in enumerate(root.findall('.//WavelengthSweep')):
-                # Extract voltage bias
-                dc_bias = float(wavelengthsweep.get('DCBias'))
-
                 # Extract wavelength and transmission data
                 wavelength_str = wavelengthsweep.find('.//L').text
                 transmission_str = wavelengthsweep.find('.//IL').text
@@ -206,29 +203,70 @@ def process_xml_files(directory1, directory2, current_directory):
                 wavelength_list = [float(w) for w in wavelength_str.split(',')]
                 transmission_list = [float(t) for t in transmission_str.split(',')]
 
-                transmission_transformed = transmission_list - poly6
+                # Plot the line connecting the two points
+                flat_transmission = np.array(transmission_list) - np.array(poly6)
 
-                # Plot Transmission vs Wavelength for all spectra
-                axs[0, 2].plot(wavelength_list, transmission_transformed, label=f'{dc_bias}V')
+                # Exclude the last graph
+                if i != len(root.findall('.//WavelengthSweep')) - 1:
+                    # Find peaks in transmission data
+                    peaks, _ = find_peaks(flat_transmission, distance=50)  # Adjust distance parameter as needed
 
-                # Find peaks in transmission data
-                peaks, _ = find_peaks(transmission_list, distance=50)  # Adjust distance parameter as needed
+                    # Iterate through peaks and find the one within the specified wavelength range
+                    for peak_index in peaks:
+                        if 1550 <= wavelength_list[peak_index] <= 1565:
+                            # Update maximum transmission point if the peak is higher
+                            if flat_transmission[peak_index] > max_transmission_point:
+                                max_transmission_point = flat_transmission[peak_index]
+                                max_transmission_wavelength = wavelength_list[peak_index]
 
-                # Iterate through peaks and find the one within the specified wavelength range
-                for peak_index in peaks:
-                    if transmission_list[peak_index] > max_transmission_point and 1530 <= wavelength_list[peak_index] <= 1555:
-                        max_transmission_point = transmission_list[peak_index]
-                        max_transmission_wavelength = wavelength_list[peak_index]
-                    if transmission_list[peak_index] > max_transmission_point2 and 1560 <= wavelength_list[peak_index] <= 1580:
-                        max_transmission_point2 = transmission_list[peak_index]
-                        max_transmission_wavelength2 = wavelength_list[peak_index]
+                if i != len(root.findall('.//WavelengthSweep')) - 1:
+                    # Find peaks in transmission data
+                    peaks, _ = find_peaks(flat_transmission, distance=50)  # Adjust distance parameter as needed
 
-                    # Set labels and title for the second subplot
-                    axs[0, 2].set_xlabel('Wavelength (nm)')
-                    axs[0, 2].set_ylabel('Flat Mearsured Transmission (dB)')
-                    axs[0, 2].set_title('Flat Transmission spectra -as measured')
-                    axs[0, 2].grid(True)
-                    axs[0, 2].legend(loc='lower right', bbox_to_anchor=(1.2, 0.47))
+                    # Iterate through peaks and find the one within the specified wavelength range
+                    for peak_index in peaks:
+                        if 1565 <= wavelength_list[peak_index] <= 1580:
+                            # Update maximum transmission point if the peak is higher
+                            if flat_transmission[peak_index] > max_transmission_point2:
+                                max_transmission_point2 = flat_transmission[peak_index]
+                                max_transmission_wavelength2 = wavelength_list[peak_index]
+
+            # Print the maximum transmission points and their corresponding wavelengths
+
+            m = (max_transmission_point2 - max_transmission_point) / (
+                    max_transmission_wavelength2 - max_transmission_wavelength)
+            b = max_transmission_point - m * max_transmission_wavelength
+            peak_fit = m * np.array(wavelength_list) + b
+
+            for i, wavelengthsweep in enumerate(root.findall('.//WavelengthSweep')):
+                dc_bias = float(wavelengthsweep.get('DCBias'))
+                # Do not display legend for the last DCBias
+                if i == len(root.findall('.//WavelengthSweep')) - 1:
+                    label = None
+                else:
+                    label = f'{dc_bias}V'
+                # Extract wavelength and transmission data
+                wavelength_str = wavelengthsweep.find('.//L').text
+                transmission_str = wavelengthsweep.find('.//IL').text
+
+                # Convert strings to lists
+                wavelength_list = [float(w) for w in wavelength_str.split(',')]
+                transmission_list = [float(t) for t in transmission_str.split(',')]
+
+                # Plot the line connecting the two points
+                if i != len(root.findall('.//WavelengthSweep')) - 1:
+                    flat_meas_trans = np.array(transmission_list) - np.array(poly6) - np.array(peak_fit)
+                else:
+                    flat_meas_trans = np.array(transmission_list) - np.array(poly6)
+                # Plot the graph
+                axs[0, 2].plot(wavelength_list, flat_meas_trans, label=label)
+
+            # Set labels and title for the second subplot
+            axs[0, 2].set_xlabel('Wavelength (nm)')
+            axs[0, 2].set_ylabel('Flat Mearsured Transmission (dB)')
+            axs[0, 2].set_title('Flat Transmission spectra -as measured')
+            axs[0, 2].grid(True)
+            axs[0, 2].legend(loc='lower right', bbox_to_anchor=(1.2, 0.47))
 
             # Initialize the dictionary to store necessary information
             data_dict = {key: [] for key in
@@ -288,17 +326,9 @@ def process_xml_files(directory1, directory2, current_directory):
             # Save the figure as an image in the output directory
             image_filename = f'{filename}.png'
             image_path = os.path.join(output_directory, image_filename)
-
-            # 백슬래시로 생성된 파일 경로
-            file_path = os.path.join(output_directory, image_filename)
-
-            # 파일 이름에서 .xml 확장자 제거
+            file_path = os.path.abspath(image_path).replace('\\', '/')  # 수정된 부분
             filename_no_ext, _ = os.path.splitext(filename)
 
-            # 백슬래시를 슬래시로 변환
-            file_path = file_path.replace('\\', '/')
-
-            # 하이퍼링크에 슬래시로 된 파일 경로 추가
             data_dict['Graph Image'].append(f'=HYPERLINK("{file_path}", "{filename_no_ext}")')
 
             # Convert extracted information into a DataFrame
@@ -321,17 +351,3 @@ def process_xml_files(directory1, directory2, current_directory):
             # Save the figure as an image in the output directory
             plt.savefig(image_path, dpi=300, bbox_inches='tight')
             plt.close(fig)  # Close the figure to free up memory
-
-if __name__ == "__main__":
-    # Get the current working directory
-    current_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Get the XML directory from user input
-    xml_directory1 = input("Enter the path D07, D08, D23, D24: ")
-    xml_directory2 = input("Enter the path to the directory containing the XML files: ")
-    xml_directory = os.path.join(current_directory, '..', 'dat', 'HY202103', xml_directory1, xml_directory2)
-    # Ensure the XML directory exists
-    if not os.path.isdir(xml_directory):
-        print(f"The directory {xml_directory} does not exist. Please enter a valid directory path.")
-    else:
-        process_xml_files(xml_directory1, xml_directory2)
