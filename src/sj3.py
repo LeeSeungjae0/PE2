@@ -192,8 +192,8 @@ def process_xml_files(directory1, directory2, current_directory):
 
             poly6 = polynomial(reference_wave)
             max_transmission_point, max_transmission_point2 = -50, -50
-            max_transmission_wavelength = 1550
-            max_transmission_wavelength2 = 1565
+            mid_transmission = (min(wavelength_list)+max(wavelength_list))/2
+
             for i, wavelengthsweep in enumerate(root.findall('.//WavelengthSweep')):
                 # Extract wavelength and transmission data
                 wavelength_str = wavelengthsweep.find('.//L').text
@@ -213,7 +213,7 @@ def process_xml_files(directory1, directory2, current_directory):
 
                     # Iterate through peaks and find the one within the specified wavelength range
                     for peak_index in peaks:
-                        if 1550 <= wavelength_list[peak_index] <= 1565:
+                        if min(wavelength_list) <= wavelength_list[peak_index] <= mid_transmission:
                             # Update maximum transmission point if the peak is higher
                             if flat_transmission[peak_index] > max_transmission_point:
                                 max_transmission_point = flat_transmission[peak_index]
@@ -225,14 +225,13 @@ def process_xml_files(directory1, directory2, current_directory):
 
                     # Iterate through peaks and find the one within the specified wavelength range
                     for peak_index in peaks:
-                        if 1565 <= wavelength_list[peak_index] <= 1580:
+                        if mid_transmission <= wavelength_list[peak_index] <= max(wavelength_list):
                             # Update maximum transmission point if the peak is higher
                             if flat_transmission[peak_index] > max_transmission_point2:
                                 max_transmission_point2 = flat_transmission[peak_index]
                                 max_transmission_wavelength2 = wavelength_list[peak_index]
 
-            # Print the maximum transmission points and their corresponding wavelengths
-
+            # Calculate the line connecting the two maximum points
             m = (max_transmission_point2 - max_transmission_point) / (
                     max_transmission_wavelength2 - max_transmission_wavelength)
             b = max_transmission_point - m * max_transmission_wavelength
