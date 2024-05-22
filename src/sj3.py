@@ -50,10 +50,16 @@ def process_xml_files(directory1, directory2, current_directory):
                 Is = params['Is']
                 Vt = params['Vt']
                 n = params['n']
-                poly_coeff = np.polyfit(x[x < 0], data[x < 0], deg=6)
-                model_negative = np.polyval(poly_coeff, x[x < 0])
-                model_positive = Is * (np.exp(x[x >= 0] / (n * Vt)) - 1)
-                model = np.concatenate((model_negative, model_positive))
+                if abs_current[0]*1000 > abs_current[12]:
+                    poly_coeff = np.polyfit(x[x < 2], data[x < 2], deg=12)
+                    model_negative = np.polyval(poly_coeff, x[x < 2])
+                    model_positive = Is * (np.exp(x[x >= 2] / (n * Vt)) - 1)
+                    model = np.concatenate((model_negative, model_positive))
+                else:
+                    poly_coeff = np.polyfit(x[x < 0], data[x < 0], deg=6)
+                    model_negative = np.polyval(poly_coeff, x[x < 0])
+                    model_positive = Is * (np.exp(x[x >= 0] / (n * Vt)) - 1)
+                    model = np.concatenate((model_negative, model_positive))
                 if data is None:
                     return model
                 else:
