@@ -1,8 +1,6 @@
 from lmfit import Parameters, Minimizer
-from decimal import Decimal
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.ticker import FuncFormatter
+from decimal import Decimal
 
 def process_iv_data(root):
     voltage_str = root.find('.//Voltage').text
