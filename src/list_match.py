@@ -11,8 +11,8 @@ def balance_lists(list1, list2):
     return list1, list2
 
 
-transmission_list, poly6 = balance_lists(transmission_list, poly6)
-wavelength_list, poly6 = balance_lists(wavelength_list, poly6)
+# transmission_list, poly6 = balance_lists(transmission_list, poly6)
+# wavelength_list, poly6 = balance_lists(wavelength_list, poly6)
 # Plot the line connecting the two points
-flat_transmission = np.array(transmission_list) - np.array(poly6)
+# flat_transmission = np.array(transmission_list) - np.array(poly6)
 
