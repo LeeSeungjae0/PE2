@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 
 # Importing functions from the separated modules
-from Parsing import parse_xml_files
+from parsing import parse_xml_files
 from I_V import process_iv_data
 from Transmission import process_transmission_data
 from Reference import extract_reference_data
@@ -35,6 +35,15 @@ def main(directory1, directory2, current_directory):
         data_dict = create_data_frame()
         data_dict = update_data_frame(data_dict, root, r_squared_values[1], ref_transmission_point, R_squared,
                                       current_values, voltage_values, abs_current)
+
+        filename = filename.replace('.xml', '')
+        # Save the figure as an image in the output directory
+        image_filename = f'{filename}.png'
+        image_path = os.path.join(output_directory, image_filename)
+        file_path = os.path.abspath(image_path).replace('\\', '/')  # 수정된 부분
+        filename_no_ext, _ = os.path.splitext(filename)
+
+        data_dict['Graph Image'].append(f'=HYPERLINK("{file_path}", "{filename_no_ext}")')
         save_data_frame(data_dict, csv_file_path)
 
         filename_no_ext = os.path.splitext(filename)[0]
@@ -46,6 +55,7 @@ def main(directory1, directory2, current_directory):
         axs[1, 2].axis('off')
         plt.savefig(image_path, dpi=300, bbox_inches='tight')
         plt.close(fig)
+        print('---', filename, '---')
 
 
 if __name__ == "__main__":
