@@ -33,7 +33,7 @@ def main(directory1, directory2, current_directory):
         plot_flat_transmission(axs[0, 2], transmissions, polynomial)
 
         data_dict = create_data_frame()
-        data_dict = update_data_frame(data_dict, root, r_squared_values[1], ref_transmission_point, R_squared,
+        data_dict = update_data_frame(data_dict, root, r_squared_values[6], ref_transmission_point, R_squared,
                                       current_values, voltage_values, abs_current)
 
         filename = filename.replace('.xml', '')
