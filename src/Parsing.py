@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as elemTree
 import os
-import numpy as np
 
 def parse_xml_files(directory1, directory2, current_directory):
     output_directory = os.path.join(current_directory, '..', 'res', 'HY202103', directory1, directory2)
@@ -12,7 +11,7 @@ def parse_xml_files(directory1, directory2, current_directory):
     xml_directory = os.path.join(current_directory, '..', 'dat', 'HY202103', directory1, directory2)
     if not os.path.isdir(xml_directory):
         print(f"The directory {xml_directory} does not exist. Please enter a valid directory path.")
-        return
+        return None, None, None
 
     xml_files = []
     for filename in os.listdir(xml_directory):
