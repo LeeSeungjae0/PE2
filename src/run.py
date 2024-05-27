@@ -2,7 +2,7 @@ import os
 import matplotlib.pyplot as plt
 
 # Importing functions from the separated modules
-from parsing import parse_xml_files
+from Parsing import parse_xml_files
 from I_V import process_iv_data
 from Transmission import process_transmission_data
 from Reference import extract_reference_data
