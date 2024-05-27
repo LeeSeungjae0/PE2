@@ -11,14 +11,14 @@ from scipy.signal import find_peaks
 # Current directory
 current_directory = os.path.dirname(__file__)
 # Directory containing XML files
-xml_directory = os.path.join(current_directory, '..','dat','HY202103','D07', '20190715_190855')
+xml_directory = os.path.join(current_directory, '..','dat','HY202103','D08', '20190712_113254')
 
 # Clear existing content of the CSV file
 open('AnalysisResult_A2.csv', 'w').close()
 
 # Parse XML files in the directory
 for filename in os.listdir(xml_directory):
-    if filename.startswith('HY202103_D07_') and filename.endswith('_LION1_DCM_LMZC.xml'):
+    if filename.startswith('HY202103_D08_') and filename.endswith('_LION1_DCM_LMZC.xml'):
         print ('---',filename,'---')
         # Parse XML file and get the root element
         xml_file_path = os.path.join(xml_directory, filename)
