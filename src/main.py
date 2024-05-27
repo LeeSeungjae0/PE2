@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-
+import os
 # Importing functions from the separated modules
 from Parsing import parse_xml_files
 from I_V import process_iv_data
