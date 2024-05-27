@@ -53,20 +53,22 @@ def plot_reference(ax, reference_wave, reference_trans, r_squared_values):
     min_transmission = np.min(reference_trans)
     y_pos = 0.5 * (max_transmission + min_transmission) - 0.3
     x_pos = reference_wave[0] + 0.5 * (reference_wave[-1] - reference_wave[0])
-
+    best_r = 0
     for degree in degrees:
         coeffs, _, _, _ = np.linalg.lstsq(np.vander(reference_wave, degree + 1), reference_trans, rcond=None)
-        polynomial = np.poly1d(coeffs)
-        ax.plot(reference_wave, polynomial(reference_wave), label=f'{degree}th')
+        polynomial1 = np.poly1d(coeffs)
+        ax.plot(reference_wave, polynomial1(reference_wave), label=f'{degree}th')
         mean_transmission = np.mean(reference_trans)
         total_variation = np.sum((reference_trans - mean_transmission) ** 2)
-        residuals = np.sum((reference_trans - polynomial(reference_wave)) ** 2)
+        residuals = np.sum((reference_trans - polynomial1(reference_wave)) ** 2)
         r_squared = 1 - (residuals / total_variation)
         r_squared_values[degree] = r_squared
         ax.text(x_pos, y_pos, f'{degree}th R²: {r_squared:.4f}', fontsize=10, verticalalignment='center',
                 horizontalalignment='center')
         y_pos -= 0.06 * (max_transmission - min_transmission)
-
+        if best_r<=r_squared:
+            best_r = r_squared
+            polynomial = polynomial1
     return polynomial
 
 
