@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from scipy.signal import find_peaks
 import numpy as np
+import list_match as lm
 
 
 def plot_iv(ax, voltage_values, abs_current, final, R_squared, current_values):
@@ -95,10 +96,14 @@ def plot_flat_transmission(ax, transmissions, polynomial):
     b = max_transmission_point - m * max_transmission_wavelength
     peak_fit = m * np.array(transmissions[0][1]) + b
 
+
     for i, (dc_bias, wavelength_list, transmission_list) in enumerate(transmissions):
-        flat_meas_trans = np.array(transmission_list) - np.array(polynomial(wavelength_list)) - (
-            np.array(peak_fit) if i != len(transmissions) - 1 else 0)
-        ax.plot(wavelength_list, flat_meas_trans, label=f'{dc_bias}V' if i != len(transmissions) - 1 else None)
+        poly_wavelength_array, peak_fit = lm.match_array_lengths(np.array(polynomial(wavelength_list)), peak_fit)
+        transmission_array, peak_fit = lm.match_array_lengths(np.array(transmission_list), peak_fit)
+        flat_meas_trans = transmission_array - poly_wavelength_array - (peak_fit if i != len(transmissions) - 1 else 0)
+        wavelength_array, flat_meas_trans = lm.match_array_lengths( np.array(wavelength_list), flat_meas_trans)
+        ax.plot(wavelength_array, flat_meas_trans, label=f'{dc_bias}V' if i != len(transmissions) - 1 else None)
+
 
     ax.set_xlabel('Wavelength (nm)')
     ax.set_ylabel('Flat Measured Transmission (dB)')
