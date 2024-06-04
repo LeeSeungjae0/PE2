@@ -1,7 +1,5 @@
 import os
 import matplotlib.pyplot as plt
-
-# Importing functions from the separated modules
 from Parsing import parse_xml_files
 from I_V import process_iv_data
 from Transmission import process_transmission_data
@@ -9,8 +7,6 @@ from Reference import extract_reference_data
 from Flat_transmission import process_flat_transmission
 from Data_Frame import create_data_frame, update_data_frame, save_data_frame
 from Plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
-
-
 def main(directory1, directory2, current_directory):
     xml_files, csv_file_path, output_directory = parse_xml_files(directory1, directory2, current_directory)
 
@@ -40,7 +36,7 @@ def main(directory1, directory2, current_directory):
         # Save the figure as an image in the output directory
         image_filename = f'{filename}.png'
         image_path = os.path.join(output_directory, image_filename)
-        file_path = os.path.abspath(image_path).replace('\\', '/')  # 수정된 부분
+        file_path = os.path.abspath(image_path).replace('\\', '/')
         filename_no_ext, _ = os.path.splitext(filename)
 
         data_dict['Graph Image'].append(f'=HYPERLINK("{file_path}", "{filename_no_ext}")')
