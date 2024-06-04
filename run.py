@@ -1,4 +1,9 @@
 import os
+import sys
+
+# Add the 'src' directory to the Python path
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+
 from main import main
 
 if __name__ == "__main__":
@@ -6,7 +11,7 @@ if __name__ == "__main__":
     directory1 = input("Enter the path D07, D08, D23, D24, or 'all': ")
 
     if directory1.lower() == 'all':
-        base_directory = os.path.join(current_directory, '..', 'dat', 'HY202103')
+        base_directory = os.path.join(current_directory, 'dat', 'HY202103')
         for dir1 in ['D07', 'D08', 'D23', 'D24']:
             dir1_path = os.path.join(base_directory, dir1)
             if not os.path.isdir(dir1_path):
