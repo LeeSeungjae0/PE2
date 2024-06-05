@@ -66,8 +66,12 @@ linear_minus_0_dot_5 = 10**(y3/10) * 0.0005
 linear_0 = 10**(y4/10) * 0.0005
 linear_0_dot_5 = 10**(y5/10) * 0.0005
 
-
-plt.scatter(x[4], linear_0, s=5, label='Measured 0.0V')
+# plt.scatter(x[0], linear_minus_2, s=1, label='Measured -2V')
+# plt.scatter(x[1], linear_minus_1_dot_5, s=1, label='Measured -1.5V')
+# plt.scatter(x[2], linear_minus_1, s=1, label='Measured -1V')
+# plt.scatter(x[3], linear_minus_0_dot_5, s=1, label='Measured -0.5V')
+plt.scatter(x[4], linear_0, s=1, label='Measured 0.0V')
+# plt.scatter(x[5], linear_0_dot_5, s=1, label='Measured 0.5V')
 plt.xlabel('Wavelength [nm]')
 plt.ylabel('Intensity')
 plt.title('Flat transmission spectra - as measured')
@@ -88,8 +92,10 @@ params['l'].vary = False
 params['deltaL'].vary = False
 params['I0'].vary = False
 
+x_nm = x*(10**-9)
+print(x_nm)
 # 피팅 수행
-result = model.fit(linear_0, params, lamda=x[4])
+result = model.fit(linear_0, params, lamda=x_nm[4])
 
 print(result.fit_report())
 r2_2 = r_squared(linear_0, result.best_fit)
