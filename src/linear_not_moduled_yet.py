@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from lmfit import Model
 from decimal import Decimal
 
-# XML 파일 파싱 절대경로 복사하여 붙여놓기 연습용임 아직 모듈하 전
+# XML 파일 파싱 절대경로 복사하여 붙여놓기 연습용임 아직 모듈화 전
 tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D07\20190715_190855\HY202103_D07_(0,-4)_LION1_DCM_LMZC.xml')
 root = tree.getroot()
 
@@ -35,10 +35,15 @@ for tr in root.iter('IL'):
 
 y = np.array(y_data_list)
 
+# 데이터 정규화 다항식 고차수 근사 error해결
+x_mean = np.mean(x[6])
+x_std = np.std(x[6])
+x_normalized = (x[6] - x_mean) / x_std
+
 # 다항식 근사
-coefficients = np.polyfit(x[6], y[6], 7)
+coefficients = np.polyfit(x_normalized, y[6], 7)
 poly = np.poly1d(coefficients)
-y_pred = poly(x[6])
+y_pred = poly(x_normalized)
 
 # 데이터 - 근사값
 y0 = y[0] - y_pred
@@ -69,7 +74,7 @@ plt.title('Flat transmission spectra - as measured')
 plt.legend(loc='lower center', ncol=2, fontsize='small')
 plt.show()
 
-def intensity(neff, delta, l, deltaL, lamda, I0):
+def intensity(lamda, neff, delta, l, deltaL, I0):
     I = I0 * np.sin(((2*np.pi/lamda) * deltaL * neff) / 2 + ((2*np.pi/lamda) * l * delta / 2))
     return I
 
@@ -77,17 +82,18 @@ def intensity(neff, delta, l, deltaL, lamda, I0):
 model = Model(intensity)
 
 # 파라미터 설정
-params = model.make_params(neff=0, delta=0, l=0, deltaL=0, I0=0)
-params['neff'].set(value=4.1)
-params['delta'].set(value=0, vary=False)
-params['l'].set(value=500*(10**-6), vary=False)
-params['deltaL'].set(value=40*(10**-6), vary=False)
-params['I0'].set(value=0.0005, vary=False)
+params = model.make_params(neff=4.1, delta=0, l=500*(10**-6), deltaL=40*(10**-6), I0=0.0005)
+params['delta'].vary = False
+params['l'].vary = False
+params['deltaL'].vary = False
+params['I0'].vary = False
 
 # 피팅 수행
 result = model.fit(linear_0, params, lamda=x[4])
 
 print(result.fit_report())
+r2_2 = r_squared(linear_0, result.best_fit)
+print("R^2:", r2_2)
 
 # 결과 시각화
 plt.scatter(x[4], linear_0, s=5, label='Measured 0.0V')
