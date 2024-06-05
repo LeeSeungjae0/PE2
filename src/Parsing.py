@@ -1,24 +1,25 @@
 import xml.etree.ElementTree as elemTree
 import os
+from datetime import datetime
 
-def parse_xml_files(directory1, directory2, current_directory):
-    output_directory = os.path.join(current_directory, 'res', 'HY202103', directory1, directory2)
-    os.makedirs(output_directory, exist_ok=True)
+def parse_xml_files(directory0, directory1, directory2, current_directory, teststie):
+    base_output_directory = os.path.join(current_directory, 'res', directory0, 'xlsx')
+    os.makedirs(base_output_directory, exist_ok=True)
 
-    csv_file_path = os.path.join(output_directory, f'{directory1}_{directory2}.csv')
-    open(csv_file_path, 'w').close()
+    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    xlsx_file_path = os.path.join(base_output_directory, f'{timestamp}.xlsx')
 
-    xml_directory = os.path.join(current_directory, 'dat', 'HY202103', directory1, directory2)
+    xml_directory = os.path.join(current_directory, 'dat', directory0, directory1, directory2)
     if not os.path.isdir(xml_directory):
         print(f"The directory {xml_directory} does not exist. Please enter a valid directory path.")
         return None, None, None
 
     xml_files = []
     for filename in os.listdir(xml_directory):
-        if filename.endswith('LMZC.xml') or filename.endswith('LMZO.xml'):
+        if any(filename.endswith(f'{site}.xml') for site in teststie):
             xml_file_path = os.path.join(xml_directory, filename)
             tree = elemTree.parse(xml_file_path)
             root = tree.getroot()
             xml_files.append((filename, root))
 
-    return xml_files, csv_file_path, output_directory
+    return xml_files, xlsx_file_path, xml_directory

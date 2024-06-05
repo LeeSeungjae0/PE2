@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def create_data_frame():
     data_dict = {key: [] for key in
                  ['Lot', 'Wafer', 'Mask', 'TestSite', 'Name', 'Date', 'Script ID', 'Script Version',
@@ -9,9 +8,7 @@ def create_data_frame():
                   'I at 1V [A]', 'Graph Image']}
     return data_dict
 
-
-def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squared, current_values, voltage_values,
-                      abs_current):
+def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squared, current_values, voltage_values, abs_current):
     test_site_info = root.find('.//TestSiteInfo')
     data_dict['Lot'].append(test_site_info.get('Batch'))
     data_dict['Wafer'].append(test_site_info.get('Wafer'))
@@ -59,8 +56,7 @@ def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squa
 
     return data_dict
 
-
-def save_data_frame(data_dict, csv_file_path):
+def save_data_frame(data_dict, xlsx_file_path):
     df = pd.DataFrame(data_dict)
-    with open(csv_file_path, 'a', newline='', encoding='utf-8') as f:
-        df.to_csv(f, mode='a', header=f.tell() == 0, index=False)
+    with pd.ExcelWriter(xlsx_file_path, engine='openpyxl') as writer:
+        df.to_excel(writer, index=False, sheet_name='Sheet1')
