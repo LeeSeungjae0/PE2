@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from lmfit import Model
 from decimal import Decimal
+from scipy.signal import find_peaks
+
+# 개선 방향 모듈화 peak로 flat하게 만든 transmission data 추출 후 그대로 박아서 만둘수 있도록 D08의 list길이차이 고치는 방식아직 적용안했으므로 넣지 말것
 
 # XML 파일 파싱 절대경로 복사하여 붙여놓기 연습용임 아직 모듈화 전
 tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D07\20190715_190855\HY202103_D07_(0,-4)_LION1_DCM_LMZC.xml')
@@ -46,25 +49,36 @@ poly = np.poly1d(coefficients)
 y_pred = poly(x_normalized)
 
 # 데이터 - 근사값
-y0 = y[0] - y_pred
-y1 = y[1] - y_pred
-y2 = y[2] - y_pred
-y3 = y[3] - y_pred
-y4 = y[4] - y_pred
-y5 = y[5] - y_pred
 y6 = y[6] - y_pred
 
+# find peak사용
+peaks = []
+print(r_squared(y[6],y_pred))
+for i in 0,1,2,3,4,5:
+    # data - 근사 ref 값
+    y0 = y[i] - y_pred
+    peaks_distance, _ = find_peaks(y0, distance=len(x[i])/2)
+    x_= x[i][peaks_distance]
+    y0_= y0[peaks_distance]
+    print(x_,y0_)
+    coefficients = np.polyfit(x_, y0_, 1)
+    poly = np.poly1d(coefficients)
+    tra = poly(x[i])
+    y0 = y0 - tra
+    peaks.append(y0)
+
+peaks = np.array(peaks)
 # R^2 계산
 r2 = r_squared(y[6], y_pred)
 print("R^2:", r2)
 
 # 선형 전력 변환
-linear_minus_2 = 10**(y0/10) * 0.0005
-linear_minus_1_dot_5 = 10**(y1/10) * 0.0005
-linear_minus_1 = 10**(y2/10) * 0.0005
-linear_minus_0_dot_5 = 10**(y3/10) * 0.0005
-linear_0 = 10**(y4/10) * 0.0005
-linear_0_dot_5 = 10**(y5/10) * 0.0005
+linear_minus_2 = 10**(peaks[0]/10) * 0.0005
+linear_minus_1_dot_5 = 10**(peaks[1]/10) * 0.0005
+linear_minus_1 = 10**(peaks[2]/10) * 0.0005
+linear_minus_0_dot_5 = 10**(peaks[3]/10) * 0.0005
+linear_0 = 10**(peaks[4]/10) * 0.0005
+linear_0_dot_5 = 10**(peaks[5]/10) * 0.0005
 
 # plt.scatter(x[0], linear_minus_2, s=1, label='Measured -2V')
 # plt.scatter(x[1], linear_minus_1_dot_5, s=1, label='Measured -1.5V')
