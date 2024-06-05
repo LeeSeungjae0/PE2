@@ -79,7 +79,7 @@ plt.legend(loc='lower center', ncol=2, fontsize='small')
 plt.show()
 
 def intensity(lamda, neff, delta, l, deltaL, I0):
-    I = I0 * np.sin(((2*np.pi/lamda) * deltaL * neff) / 2 + ((2*np.pi/lamda) * l * delta / 2))
+    I = I0 * np.sin(((2*np.pi/lamda) * deltaL * neff) / 2 + ((2*np.pi/lamda) * l * delta / 2))**2
     return I
 
 # 모델 생성
