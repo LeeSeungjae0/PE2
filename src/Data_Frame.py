@@ -8,7 +8,7 @@ def create_data_frame():
                   'I at 1V [A]', 'Graph Image']}
     return data_dict
 
-def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squared, current_values, voltage_values, abs_current):
+def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squared, current_values, voltage_values, abs_current, transmissions):
     test_site_info = root.find('.//TestSiteInfo')
     data_dict['Lot'].append(test_site_info.get('Batch'))
     data_dict['Wafer'].append(test_site_info.get('Wafer'))
@@ -37,7 +37,7 @@ def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squa
         data_dict['ErrorFlag'].append('0')
         data_dict['Error description'].append('No Error')
 
-    data_dict['Analysis Wavelength'].append('1550')
+    data_dict['Analysis Wavelength'].append(int(transmissions[0][1][0]))
 
     data_dict['Rsq of Ref. spectrum (Nth)'].append(format(float(r_squared), '.4f'))
     data_dict['Max transmission of Ref. spec. (dB)'].append(format(float(ref_transmission_point), '.4f'))

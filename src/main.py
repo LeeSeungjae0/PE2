@@ -30,7 +30,7 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
         plot_flat_transmission(axs[0, 2], transmissions, polynomial)
 
         data_dict = update_data_frame(data_dict, root, r_squared_values[6], ref_transmission_point, R_squared,
-                                      current_values, voltage_values, abs_current)
+                                      current_values, voltage_values, abs_current, transmissions)
 
         filename = filename.replace('.xml', '')
         image_output_directory = os.path.join(current_directory, 'res', directory0, directory1, directory2)
