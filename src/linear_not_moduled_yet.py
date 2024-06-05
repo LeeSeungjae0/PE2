@@ -53,14 +53,12 @@ y6 = y[6] - y_pred
 
 # find peak사용
 peaks = []
-print(r_squared(y[6],y_pred))
 for i in 0,1,2,3,4,5:
     # data - 근사 ref 값
     y0 = y[i] - y_pred
     peaks_distance, _ = find_peaks(y0, distance=len(x[i])/2)
     x_= x[i][peaks_distance]
     y0_= y0[peaks_distance]
-    print(x_,y0_)
     coefficients = np.polyfit(x_, y0_, 1)
     poly = np.poly1d(coefficients)
     tra = poly(x[i])
@@ -108,13 +106,13 @@ params['I0'].vary = False
 params['neff'].vary = True
 
 x_nm = x*(10**-9)
-print(x_nm)
 # 피팅 수행
 result = model.fit(linear_0, params, lamda=x_nm[4])
 
-print(result.fit_report())
 r2_2 = r_squared(linear_0, result.best_fit)
 print("R^2:", r2_2)
+neff_value = result.params['neff'].value
+print("Optimized neff value:", neff_value)
 
 # 결과 시각화
 plt.scatter(x[4], linear_0, s=5, label='Measured 0.0V')
@@ -124,4 +122,80 @@ plt.xlabel('Wavelength [nm]')
 plt.ylabel('Intensity')
 plt.title('Flat transmission spectra - as measured')
 plt.legend(loc='lower center', ncol=2, fontsize='small')
+plt.show()
+
+delta_n = []
+# 모델 생성
+model2 = Model(intensity)
+
+# 파라미터 설정
+params = model2.make_params(neff=neff_value, delta=0, l=500*(10**-6), deltaL=40*(10**-6), I0=0.0005)
+params['delta'].vary = True
+params['l'].vary = False
+params['deltaL'].vary = False
+params['I0'].vary = False
+params['neff'].vary = False
+
+x_nm = x*(10**-9)
+# 피팅 수행
+result2 = model2.fit(linear_minus_2, params, lamda=x_nm[0])
+r2_3 = r_squared(linear_minus_2, result2.best_fit)
+delta_neff_value = result2.params['delta'].value
+print("Optimized delta_neff value:", delta_neff_value)
+print("R^2:", r2_3)
+delta_n.append(delta_neff_value)
+
+result3 = model2.fit(linear_minus_1_dot_5, params, lamda=x_nm[1])
+r2_4 = r_squared(linear_minus_1_dot_5, result3.best_fit)
+delta_neff_value = result3.params['delta'].value
+print("Optimized delta_neff value:", delta_neff_value)
+print("R^2:", r2_4)
+delta_n.append(delta_neff_value)
+
+result4 = model2.fit(linear_minus_1, params, lamda=x_nm[2])
+r2_5 = r_squared(linear_minus_1, result4.best_fit)
+delta_neff_value = result4.params['delta'].value
+print("Optimized delta_neff value:", delta_neff_value)
+print("R^2:", r2_5)
+delta_n.append(delta_neff_value)
+
+result5 = model2.fit(linear_minus_0_dot_5, params, lamda=x_nm[3])
+r2_6 = r_squared(linear_minus_0_dot_5, result5.best_fit)
+delta_neff_value = result5.params['delta'].value
+print("Optimized delta_neff value:", delta_neff_value)
+print("R^2:", r2_6)
+delta_n.append(delta_neff_value)
+
+print("Optimized delta_neff value:", 0)
+print("R^2:", r2_2)
+delta_n.append(0)
+
+result6 = model2.fit(linear_0_dot_5, params, lamda=x_nm[5])
+r2_7 = r_squared(linear_0_dot_5, result6.best_fit)
+delta_neff_value = result6.params['delta'].value
+print("Optimized delta_neff value:", delta_neff_value)
+print("R^2:", r2_7)
+delta_n.append(delta_neff_value)
+
+# 결과 시각화
+plt.plot(x[0], result2.best_fit, label='Fitted -2V', color='red')
+plt.plot(x[1], result3.best_fit, label='Fitted -1.5V', color='red')
+plt.plot(x[2], result4.best_fit, label='Fitted -1V', color='red')
+plt.plot(x[3], result5.best_fit, label='Fitted -0.5V', color='red')
+plt.plot(x[4], result.best_fit, label='Fitted 0V', color='red')
+plt.plot(x[5], result6.best_fit, label='Fitted 0.5V', color='red')
+
+plt.xlabel('Wavelength [nm]')
+plt.ylabel('Intensity')
+plt.title('Flat transmission spectra - as measured')
+plt.legend(loc='lower center', ncol=2, fontsize='small')
+plt.show()
+
+voltage = [-2, -1.5, -1, -0.5, 0, 0.5]
+
+
+plt.plot( voltage, delta_n, label='delta', color='red')
+plt.xlabel('Voltage')
+plt.ylabel('delta_n')
+plt.title('Flat transmission spectra - as measured')
 plt.show()
