@@ -91,6 +91,7 @@ params['delta'].vary = False
 params['l'].vary = False
 params['deltaL'].vary = False
 params['I0'].vary = False
+params['neff'].vary = True
 
 x_nm = x*(10**-9)
 print(x_nm)
