@@ -137,6 +137,7 @@ params['I0'].vary = False
 params['neff'].vary = False
 
 x_nm = x*(10**-9)
+
 # 피팅 수행
 result2 = model2.fit(linear_minus_2, params, lamda=x_nm[0])
 r2_3 = r_squared(linear_minus_2, result2.best_fit)
