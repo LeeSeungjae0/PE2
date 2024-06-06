@@ -70,6 +70,10 @@ peaks = np.array(peaks)
 r2 = r_squared(y[6], y_pred)
 print("R^2:", r2)
 
+
+
+# 여기 부터는 필수적인 부분 flat transmission data 받으면 이 이후 부분에 넣으면됨 peak 대신
+
 # 선형 전력 변환
 linear_minus_2 = 10**(peaks[0]/10) * 0.0005
 linear_minus_1_dot_5 = 10**(peaks[1]/10) * 0.0005
@@ -139,6 +143,8 @@ params['neff'].vary = False
 x_nm = x*(10**-9)
 
 # 피팅 수행
+
+# -2V
 result2 = model2.fit(linear_minus_2, params, lamda=x_nm[0])
 r2_3 = r_squared(linear_minus_2, result2.best_fit)
 delta_neff_value = result2.params['delta'].value
@@ -146,6 +152,8 @@ print("Optimized delta_neff value:", delta_neff_value)
 print("R^2:", r2_3)
 delta_n.append(delta_neff_value)
 
+
+# -1.5V
 result3 = model2.fit(linear_minus_1_dot_5, params, lamda=x_nm[1])
 r2_4 = r_squared(linear_minus_1_dot_5, result3.best_fit)
 delta_neff_value = result3.params['delta'].value
@@ -153,6 +161,8 @@ print("Optimized delta_neff value:", delta_neff_value)
 print("R^2:", r2_4)
 delta_n.append(delta_neff_value)
 
+
+# -1V
 result4 = model2.fit(linear_minus_1, params, lamda=x_nm[2])
 r2_5 = r_squared(linear_minus_1, result4.best_fit)
 delta_neff_value = result4.params['delta'].value
@@ -160,6 +170,8 @@ print("Optimized delta_neff value:", delta_neff_value)
 print("R^2:", r2_5)
 delta_n.append(delta_neff_value)
 
+
+# -0.5V
 result5 = model2.fit(linear_minus_0_dot_5, params, lamda=x_nm[3])
 r2_6 = r_squared(linear_minus_0_dot_5, result5.best_fit)
 delta_neff_value = result5.params['delta'].value
@@ -167,10 +179,14 @@ print("Optimized delta_neff value:", delta_neff_value)
 print("R^2:", r2_6)
 delta_n.append(delta_neff_value)
 
+
+# 0V
 print("Optimized delta_neff value:", 0)
 print("R^2:", r2_2)
 delta_n.append(0)
 
+
+# 0.5V
 result6 = model2.fit(linear_0_dot_5, params, lamda=x_nm[5])
 r2_7 = r_squared(linear_0_dot_5, result6.best_fit)
 delta_neff_value = result6.params['delta'].value
