@@ -178,12 +178,12 @@ print("R^2:", r2_7)
 delta_n.append(delta_neff_value)
 
 # 결과 시각화
-plt.plot(x[0], result2.best_fit, label='Fitted -2V', color='red')
-plt.plot(x[1], result3.best_fit, label='Fitted -1.5V', color='red')
-plt.plot(x[2], result4.best_fit, label='Fitted -1V', color='red')
-plt.plot(x[3], result5.best_fit, label='Fitted -0.5V', color='red')
-plt.plot(x[4], result.best_fit, label='Fitted 0V', color='red')
-plt.plot(x[5], result6.best_fit, label='Fitted 0.5V', color='red')
+plt.plot(x[0], result2.best_fit, label='Fitted -2V')
+plt.plot(x[1], result3.best_fit, label='Fitted -1.5V')
+plt.plot(x[2], result4.best_fit, label='Fitted -1V')
+plt.plot(x[3], result5.best_fit, label='Fitted -0.5V')
+plt.plot(x[4], result.best_fit, label='Fitted 0V')
+plt.plot(x[5], result6.best_fit, label='Fitted 0.5V')
 
 plt.xlabel('Wavelength [nm]')
 plt.ylabel('Intensity')
