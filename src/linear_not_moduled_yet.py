@@ -8,7 +8,7 @@ from scipy.signal import find_peaks
 # 개선 방향 모듈화 peak로 flat하게 만든 transmission data 추출 후 그대로 박아서 만둘수 있도록 D08의 list길이차이 고치는 방식아직 적용안했으므로 넣지 말것
 
 # XML 파일 파싱 절대경로 복사하여 붙여놓기 연습용임 아직 모듈화 전
-tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D07\20190715_190855\HY202103_D07_(0,-4)_LION1_DCM_LMZC.xml')
+tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D23\20190603_204847\HY202103_D23_(0,-4)_LION1_DCM_LMZO.xml')
 root = tree.getroot()
 
 # 데이터 리스트 초기화
@@ -73,6 +73,7 @@ print("R^2:", r2)
 
 
 # 여기 부터는 필수적인 부분 flat transmission data 받으면 이 이후 부분에 넣으면됨 peak 대신
+# def linear(transmissions):
 
 # 선형 전력 변환
 linear_minus_2 = 10**(peaks[0]/10) * 0.0005
@@ -90,7 +91,7 @@ plt.scatter(x[4], linear_0, s=1, label='Measured 0.0V')
 # plt.scatter(x[5], linear_0_dot_5, s=1, label='Measured 0.5V')
 plt.xlabel('Wavelength [nm]')
 plt.ylabel('Intensity')
-plt.title('Flat transmission spectra - as measured')
+plt.title('Flat transmission spectra - linear')
 plt.legend(loc='lower center', ncol=2, fontsize='small')
 plt.show()
 
@@ -124,7 +125,7 @@ plt.plot(x[4], result.best_fit, label='Fitted 0.0V', color='red')
 
 plt.xlabel('Wavelength [nm]')
 plt.ylabel('Intensity')
-plt.title('Flat transmission spectra - as measured')
+plt.title('Flat transmission spectra - fitted')
 plt.legend(loc='lower center', ncol=2, fontsize='small')
 plt.show()
 
@@ -148,7 +149,7 @@ x_nm = x*(10**-9)
 result2 = model2.fit(linear_minus_2, params, lamda=x_nm[0])
 r2_3 = r_squared(linear_minus_2, result2.best_fit)
 delta_neff_value = result2.params['delta'].value
-print("Optimized delta_neff value:", delta_neff_value)
+print("Optimized delta_neff value(-2.0V):", delta_neff_value)
 print("R^2:", r2_3)
 delta_n.append(delta_neff_value)
 
@@ -157,7 +158,7 @@ delta_n.append(delta_neff_value)
 result3 = model2.fit(linear_minus_1_dot_5, params, lamda=x_nm[1])
 r2_4 = r_squared(linear_minus_1_dot_5, result3.best_fit)
 delta_neff_value = result3.params['delta'].value
-print("Optimized delta_neff value:", delta_neff_value)
+print("Optimized delta_neff value(-1.5V):", delta_neff_value)
 print("R^2:", r2_4)
 delta_n.append(delta_neff_value)
 
@@ -166,7 +167,7 @@ delta_n.append(delta_neff_value)
 result4 = model2.fit(linear_minus_1, params, lamda=x_nm[2])
 r2_5 = r_squared(linear_minus_1, result4.best_fit)
 delta_neff_value = result4.params['delta'].value
-print("Optimized delta_neff value:", delta_neff_value)
+print("Optimized delta_neff value(-1V):", delta_neff_value)
 print("R^2:", r2_5)
 delta_n.append(delta_neff_value)
 
@@ -175,23 +176,26 @@ delta_n.append(delta_neff_value)
 result5 = model2.fit(linear_minus_0_dot_5, params, lamda=x_nm[3])
 r2_6 = r_squared(linear_minus_0_dot_5, result5.best_fit)
 delta_neff_value = result5.params['delta'].value
-print("Optimized delta_neff value:", delta_neff_value)
+print("Optimized delta_neff value(-0.5V):", delta_neff_value)
 print("R^2:", r2_6)
 delta_n.append(delta_neff_value)
 
 
 # 0V
-print("Optimized delta_neff value:", 0)
-print("R^2:", r2_2)
-delta_n.append(0)
+result6 = model2.fit(linear_0, params, lamda=x_nm[3])
+r2_7 = r_squared(linear_0, result6.best_fit)
+delta_neff_value = result6.params['delta'].value
+print("Optimized delta_neff value(0V):", delta_neff_value)
+print("R^2:", r2_7)
+delta_n.append(delta_neff_value)
 
 
 # 0.5V
-result6 = model2.fit(linear_0_dot_5, params, lamda=x_nm[5])
-r2_7 = r_squared(linear_0_dot_5, result6.best_fit)
-delta_neff_value = result6.params['delta'].value
-print("Optimized delta_neff value:", delta_neff_value)
-print("R^2:", r2_7)
+result7 = model2.fit(linear_0_dot_5, params, lamda=x_nm[5])
+r2_8 = r_squared(linear_0_dot_5, result7.best_fit)
+delta_neff_value = result7.params['delta'].value
+print("Optimized delta_neff value(0.5V):", delta_neff_value)
+print("R^2:", r2_8)
 delta_n.append(delta_neff_value)
 
 # 결과 시각화
@@ -199,12 +203,12 @@ plt.plot(x[0], result2.best_fit, label='Fitted -2V')
 plt.plot(x[1], result3.best_fit, label='Fitted -1.5V')
 plt.plot(x[2], result4.best_fit, label='Fitted -1V')
 plt.plot(x[3], result5.best_fit, label='Fitted -0.5V')
-plt.plot(x[4], result.best_fit, label='Fitted 0V')
-plt.plot(x[5], result6.best_fit, label='Fitted 0.5V')
+plt.plot(x[4], result6.best_fit, label='Fitted 0V')
+plt.plot(x[5], result7.best_fit, label='Fitted 0.5V')
 
 plt.xlabel('Wavelength [nm]')
 plt.ylabel('Intensity')
-plt.title('Flat transmission spectra - as measured')
+plt.title('Flat transmission spectra - fitted')
 plt.legend(loc='lower center', ncol=2, fontsize='small')
 plt.show()
 
@@ -214,5 +218,5 @@ voltage = [-2, -1.5, -1, -0.5, 0, 0.5]
 plt.plot( voltage, delta_n, label='delta', color='red')
 plt.xlabel('Voltage')
 plt.ylabel('delta_n')
-plt.title('Flat transmission spectra - as measured')
+plt.title('Delta n_eff')
 plt.show()
