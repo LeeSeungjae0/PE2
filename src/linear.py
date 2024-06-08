@@ -79,8 +79,6 @@ def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     params['I0'].vary = False
     params['neff'].vary = False
 
-    x_nm = x * (10 ** -9)
-
     # 피팅 수행
 
     # -2V
@@ -165,16 +163,15 @@ def plot_reference( reference_wave, reference_trans, r_squared_values):
             polynomial = polynomial1
     return polynomial
 
-tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D23\20190603_204847\HY202103_D23_(0,-4)_LION1_DCM_LMZO.xml')
+tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D08\20190712_113254\HY202103_D08_(2,-1)_LION1_DCM_LMZC.xml')
 root = tree.getroot()
 reference_wave, reference_trans = extract_reference_data(root)
 r_squared_values = {}
 polynomial = plot_reference( reference_wave, reference_trans, r_squared_values)
 transmissions = process_transmission_data(root)
 wavelength_array, flat_meas_trans = process_flat_transmission(transmissions, polynomial)
-print(wavelength_array, flat_meas_trans)
 #test
-fig, axs = plt.subplots(4, 1, figsize=(18, 8))
+fig, axs = plt.subplots(1, 4)
 linear(axs[0], axs[1], axs[2], axs[3], wavelength_array, flat_meas_trans)
 plt.show()
 
