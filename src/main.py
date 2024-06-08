@@ -26,9 +26,7 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
         ref_transmission_point = plot_transmission(axs[0, 0], transmissions)
         r_squared_values = {}
         polynomial = plot_reference(axs[0, 1], reference_wave, reference_trans, r_squared_values)
-        peak_fit = process_flat_transmission(transmissions, polynomial)
         plot_flat_transmission(axs[0, 2], transmissions, polynomial)
-
         data_dict = update_data_frame(data_dict, root, r_squared_values[6], ref_transmission_point, R_squared,
                                       current_values, voltage_values, abs_current)
 
