@@ -4,8 +4,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 from Setting import setting
 
 directory0 = 'HY202103'
-directory1 = 'all'              # 'D07', 'D08', 'D23', 'D24', 'all'
-directory2 = 'all'              # ex) '20190715_190855' or 'all'
+directory1 = 'D08'              # 'D07', 'D08', 'D23', 'D24', 'all'
+directory2 = '20190712_113254'              # ex) '20190715_190855' or 'all'
 
 teststie = ['LMZO', 'LMZC']     # ['LMZO', 'LMZC']
 xlsx_file = True                # True or False
