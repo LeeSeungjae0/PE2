@@ -7,6 +7,7 @@ from Reference import extract_reference_data
 from Flat_transmission import process_flat_transmission
 from Data_Frame import update_data_frame
 from Plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
+from linear import linear
 
 def main(directory0, directory1, directory2, current_directory, data_dict, testsite, graph_image):
     xml_files, _, xml_directory = parse_xml_files(directory0, directory1, directory2, current_directory,testsite)
@@ -20,13 +21,14 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
         transmissions = process_transmission_data(root)
         reference_wave, reference_trans = extract_reference_data(root)
 
-        fig, axs = plt.subplots(2, 3, figsize=(18, 8))
+        fig, axs = plt.subplots(2, 4, figsize=(18, 8))
 
-        plot_iv(axs[1, 0], voltage_values, abs_current, final, R_squared, current_values)
+        plot_iv(axs[0, 3], voltage_values, abs_current, final, R_squared, current_values)
         ref_transmission_point = plot_transmission(axs[0, 0], transmissions)
         r_squared_values = {}
         polynomial = plot_reference(axs[0, 1], reference_wave, reference_trans, r_squared_values)
-        plot_flat_transmission(axs[0, 2], transmissions, polynomial)
+        wavelength_array, flat_meas_trans = plot_flat_transmission(axs[0, 2], transmissions, polynomial)
+        linear(axs[1, 0], axs[1, 1], axs[1, 2], axs[1, 3], wavelength_array, flat_meas_trans)
         data_dict = update_data_frame(data_dict, root, r_squared_values[6], ref_transmission_point, R_squared,
                                       current_values, voltage_values, abs_current)
 
@@ -46,8 +48,6 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
         plt.suptitle(filename)
         plt.tight_layout()
         plt.subplots_adjust(hspace=0.3)
-        axs[1, 1].axis('off')
-        axs[1, 2].axis('off')
         if graph_image:
             plt.savefig(image_path, dpi=300, bbox_inches='tight')
             plt.close(fig)
