@@ -18,6 +18,8 @@ def r_squared(y_true, y_pred):
 # ax1: 데이터 선형화, ax2: 근사, ax3: 근사화 모둠, ax4: delta neff
 def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     # 선형 전력 변환
+    r2_linear = []
+
     linear_minus_2 = 10 ** (flat_meas_trans[0] / 10) * 0.0005
     linear_minus_1_dot_5 = 10 ** (flat_meas_trans[1] / 10) * 0.0005
     linear_minus_1 = 10 ** (flat_meas_trans[2] / 10) * 0.0005
@@ -137,7 +139,15 @@ def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     ax4.set_ylabel('delta_n')
     ax4.set_title('Delta n_eff')
 
-    return
+    r2_linear.append(r2_2)      # fitted 0V
+    r2_linear.append(r2_3)      # -2V
+    r2_linear.append(r2_4)      # -1.5V
+    r2_linear.append(r2_5)      # -1V
+    r2_linear.append(r2_6)      # -0.5V
+    r2_linear.append(r2_7)      # 0V
+    r2_linear.append(r2_8)      # 0.5V
+
+    return r2_linear
 
 def plot_reference( reference_wave, reference_trans, r_squared_values):
 
@@ -171,7 +181,7 @@ polynomial = plot_reference( reference_wave, reference_trans, r_squared_values)
 transmissions = process_transmission_data(root)
 wavelength_array, flat_meas_trans = process_flat_transmission(transmissions, polynomial)
 #test
-fig, axs = plt.subplots(1, 4)
+fig, axs = plt.subplots(1, 4, figsize=(16,4))
 linear(axs[0], axs[1], axs[2], axs[3], wavelength_array, flat_meas_trans)
+plt.tight_layout()
 plt.show()
-
