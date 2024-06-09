@@ -77,6 +77,9 @@ def plot_flat_transmission(ax, transmissions, polynomial):
     mid_transmission = (min(transmissions[0][1]) + max(transmissions[0][1])) / 2
     max_transmission_point, max_transmission_point2 = -50, -50
 
+    wavelength = []
+    flat_trans = []
+
     for i, (dc_bias, wavelength_list, transmission_list) in enumerate(transmissions):
         flat_transmission = np.array(transmission_list) - np.array(polynomial(wavelength_list))
         if i != len(transmissions) - 1:
@@ -103,6 +106,12 @@ def plot_flat_transmission(ax, transmissions, polynomial):
         flat_meas_trans = transmission_array - poly_wavelength_array - (peak_fit if i != len(transmissions) - 1 else 0)
         wavelength_array, flat_meas_trans = lm.match_array_lengths( np.array(wavelength_list), flat_meas_trans)
         ax.plot(wavelength_array, flat_meas_trans, label=f'{dc_bias}V' if i != len(transmissions) - 1 else None)
+
+        wavelength.append(wavelength_array)
+        flat_trans.append(flat_meas_trans)
+    wavelength = np.array(wavelength)
+    flat_trans = np.array(flat_trans)
+    return wavelength, flat_trans
 
 
     ax.set_xlabel('Wavelength (nm)')

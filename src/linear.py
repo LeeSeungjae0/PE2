@@ -173,15 +173,15 @@ def plot_reference( reference_wave, reference_trans, r_squared_values):
             polynomial = polynomial1
     return polynomial
 
-tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D08\20190712_113254\HY202103_D08_(2,-1)_LION1_DCM_LMZC.xml')
-root = tree.getroot()
-reference_wave, reference_trans = extract_reference_data(root)
-r_squared_values = {}
-polynomial = plot_reference( reference_wave, reference_trans, r_squared_values)
-transmissions = process_transmission_data(root)
-wavelength_array, flat_meas_trans = process_flat_transmission(transmissions, polynomial)
-#test
-fig, axs = plt.subplots(1, 4, figsize=(16,4))
-linear(axs[0], axs[1], axs[2], axs[3], wavelength_array, flat_meas_trans)
-plt.tight_layout()
-plt.show()
+#tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D08\20190712_113254\HY202103_D08_(2,-1)_LION1_DCM_LMZC.xml')
+#root = tree.getroot()
+#reference_wave, reference_trans = extract_reference_data(root)
+#r_squared_values = {}
+#polynomial = plot_reference( reference_wave, reference_trans, r_squared_values)
+#transmissions = process_transmission_data(root)
+#wavelength_array, flat_meas_trans = process_flat_transmission(transmissions, polynomial)
+##test
+#fig, axs = plt.subplots(1, 4, figsize=(16,4))
+#linear(axs[0], axs[1], axs[2], axs[3], wavelength_array, flat_meas_trans)
+#plt.tight_layout()
+#plt.show()
