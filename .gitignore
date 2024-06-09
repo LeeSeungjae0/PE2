@@ -1,7 +1,13 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-dat/
 misc.xml
 *.iml
-res/
+.idea/
+
+# Ignore files in dat and res, but not the directories themselves
+dat/*
+res/*
+
+# Exclude .gitkeep files so they can be added to the repository
+!.gitkeep

@@ -1,7 +1,9 @@
 from scipy.signal import find_peaks
 import numpy as np
-
+import list_match as lm
 def process_flat_transmission(transmissions, polynomial):
+    wavelength = []
+    transmission = []
     mid_transmission = (min(transmissions[0][1]) + max(transmissions[0][1])) / 2
     max_transmission_point, max_transmission_point2 = -50, -50
     for i, (dc_bias, wavelength_list, transmission_list) in enumerate(transmissions):
@@ -22,4 +24,13 @@ def process_flat_transmission(transmissions, polynomial):
     b = max_transmission_point - m * max_transmission_wavelength
     peak_fit = m * np.array(transmissions[0][1]) + b
 
-    return peak_fit
+    for i, (dc_bias, wavelength_list, transmission_list) in enumerate(transmissions):
+        poly_wavelength_array, peak_fit = lm.match_array_lengths(np.array(polynomial(wavelength_list)), peak_fit)
+        transmission_array, peak_fit = lm.match_array_lengths(np.array(transmission_list), peak_fit)
+        flat_meas_trans = transmission_array - poly_wavelength_array - (peak_fit if i != len(transmissions) - 1 else 0)
+        wavelength_array, flat_meas_trans = lm.match_array_lengths( np.array(wavelength_list), flat_meas_trans)
+        wavelength.append(wavelength_array)
+        transmission.append(flat_meas_trans)
+    wavelength = np.array(wavelength)
+    transmission = np.array(transmission)
+    return wavelength, transmission
