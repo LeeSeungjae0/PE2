@@ -33,6 +33,9 @@ def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squa
     if float(r_squared) < 0.95:
         data_dict['ErrorFlag'].append('1')
         data_dict['Error description'].append('Ref. spec. Error')
+    elif abs(current_values[0])*1000 > abs(current_values[12]):
+        data_dict['ErrorFlag'].append('2')
+        data_dict['Error description'].append('IV. Error')
     else:
         data_dict['ErrorFlag'].append('0')
         data_dict['Error description'].append('No Error')
