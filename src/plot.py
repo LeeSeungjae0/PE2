@@ -3,8 +3,6 @@ from matplotlib.ticker import FuncFormatter
 from scipy.signal import find_peaks
 import numpy as np
 import list_match as lm
-
-
 def plot_iv(ax, voltage_values, abs_current, final, R_squared, current_values):
     def log_formatter(x, pos):
         return "{:.0e}".format(x)
@@ -42,7 +40,7 @@ def plot_transmission(ax, transmissions):
     ax.set_ylabel('Transmission (dB)')
     ax.set_title('Transmission vs Wavelength')
     ax.grid(True)
-    ax.legend(loc='lower right', bbox_to_anchor=(1.2, 0.47))
+    ax.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
 
     return ref_transmission_point
 
@@ -70,6 +68,13 @@ def plot_reference(ax, reference_wave, reference_trans, r_squared_values):
         if best_r<=r_squared:
             best_r = r_squared
             polynomial = polynomial1
+
+        ax.set_xlabel('Wavelength (nm)')
+        ax.set_ylabel('Transmission (dB)')
+        ax.set_title('Reference Transmission')
+        ax.grid(True)
+        ax.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
+
     return polynomial
 
 
@@ -113,10 +118,11 @@ def plot_flat_transmission(ax, transmissions, polynomial):
     flat_trans = lm.trim_lists_to_min_length(flat_trans)
     wavelength = np.array(wavelength)
     flat_trans = np.array(flat_trans)
-    return wavelength, flat_trans
 
     ax.set_xlabel('Wavelength (nm)')
     ax.set_ylabel('Flat Measured Transmission (dB)')
     ax.set_title('Flat Transmission spectra - as measured')
     ax.grid(True)
-    ax.legend(loc='lower right', bbox_to_anchor=(1.2, 0.47))
+    ax.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
+
+    return wavelength, flat_trans

@@ -1,10 +1,10 @@
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
-from Setting import setting
+from setting import setting
 
 lot = 'HY202103'
-wafer_number = 'D07'                 # 'D07', 'D08', 'D23', 'D24', 'all'
+wafer_number = 'all'                 # 'D07', 'D08', 'D23', 'D24', 'all'
 measurement_date = 'all'             # ex) '20190715_190855' or 'all'
 
 testsite = ['LMZO', 'LMZC']          # ['LMZO', 'LMZC']
