@@ -8,10 +8,10 @@ from Flat_transmission import process_flat_transmission
 from Data_Frame import update_data_frame
 from Plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
 from linear import linear
+from datetime import datetime
 
-def main(directory0, directory1, directory2, current_directory, data_dict, testsite, graph_image):
+def main(directory0, directory1, directory2, current_directory, data_dict, testsite, graph_image, timestamp):
     xml_files, _, xml_directory = parse_xml_files(directory0, directory1, directory2, current_directory,testsite)
-
     if xml_files is None:
         print("Failed to parse XML files. Please check the directory paths and try again.")
         return
@@ -33,7 +33,7 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
                                       current_values, voltage_values, abs_current, transmissions)
 
         filename = filename.replace('.xml', '')
-        image_output_directory = os.path.join(current_directory, 'res', directory0, directory1, directory2)
+        image_output_directory = os.path.join(current_directory, 'res', timestamp, directory0, directory1, directory2)
         os.makedirs(image_output_directory, exist_ok=True)
         image_filename = f'{filename}.png'
         image_path = os.path.join(image_output_directory, image_filename)
@@ -52,3 +52,4 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
             plt.savefig(image_path, dpi=300, bbox_inches='tight')
             plt.close(fig)
         print('---', filename, '---')
+    return timestamp
