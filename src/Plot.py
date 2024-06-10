@@ -115,7 +115,6 @@ def plot_flat_transmission(ax, transmissions, polynomial):
     flat_trans = np.array(flat_trans)
     return wavelength, flat_trans
 
-
     ax.set_xlabel('Wavelength (nm)')
     ax.set_ylabel('Flat Measured Transmission (dB)')
     ax.set_title('Flat Transmission spectra - as measured')
