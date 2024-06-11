@@ -79,11 +79,11 @@ The example code is set to 'True'.
 
 <h3>2. When data analysis is finished by running run.py , 'Data analysis is complete.' will appear.</h3>
 <h3>3. You can check the data analyzed in the 'res' file.</h3>
-  - Data is stored in a file with the date and time of analysis as the name. The analyzed data can be accumulated.<br>
-  - In the 'res' file, the picture of the graph is stored with the same name as the data file.<br>
-  - The xlsx file stores the data frame.<br>
-  - You can check the information in the list below on xlsx.
-    >    'Lot, Wafer, Mask, TestSite, Name, Date, Script ID, Script Version, Script Owner, Operator, Row, Column, ErrorFlag, Error description, Analysis Wavelength, Rsq of Ref. spectrum (Nth), Max transmission of Ref. spec. (dB), Rsq of IV, I at -1V [A], I at 1V [A], Graph Image'.
+- Data is stored in a file with the date and time of analysis as the name. The analyzed data can be accumulated.<br>
+- In the 'res' file, the picture of the graph is stored with the same name as the data file.<br>
+- The xlsx file stores the data frame.<br>
+- You can check the information in the list below on xlsx.
+  - 'Lot, Wafer, Mask, TestSite, Name, Date, Script ID, Script Version, Script Owner, Operator, Row, Column, ErrorFlag, Error description, Analysis Wavelength, Rsq of Ref. spectrum (Nth), Max transmission of Ref. spec. (dB), Rsq of IV, I at -1V [A], I at 1V [A], Graph Image'.
 
 
 <h3> 4. You open the analyzed xlsx file and check the data. </h3>
