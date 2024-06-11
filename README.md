@@ -6,7 +6,7 @@
 [Background Description](#Background-Description)<br>
 [Program Functions](#Program-Functions)<br>
 [How to use](#How-to-use)<br>
-[Example photos from analysis results](#Example-photos-from-analysis-results)
+[Example Result Photos](#Example-photos-from-analysis-results)
 
 ---
 # 📌Who made <a id="Who made"></a> 
@@ -96,6 +96,6 @@ The example code is set to 'True'.
   - 2: The IV fitting graph has an error.
 
 ---
-# 📌Example photos from analysis results <a id="Example-photos-from-analysis-results"></a> 
+# 📌Example Result Photos  <a id="Example-photos-from-analysis-results"></a> 
 [Graph Image]()
 [xlsx Image]()
