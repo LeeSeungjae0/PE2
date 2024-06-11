@@ -1,7 +1,7 @@
-<h1 align="center"> Group 2's project </h1>
+<h1 align="center"> 💻 Group 2's project 💻 </h1> 
 
 ---
-# Index 
+# 📌Index 
 [Who made](#Who-made)<br>
 [Background Description](#Background-Description)<br>
 [Program Functions](#Program-Functions)<br>
@@ -9,7 +9,7 @@
 [Example photos from analysis results](#Example-photos-from-analysis-results)
 
 ---
-# Who made <a id="Who made"></a> 
+# 📌Who made <a id="Who made"></a> 
 
 - Dongmin Seo :
 - Lina Kim : flfsks4242@hanyang.ac.kr
@@ -19,7 +19,7 @@
 If you have any questions about this project, you can email us.
 
 ---
-# Background Description <a id="Background-Description"></a> 
+# 📌Background Description <a id="Background-Description"></a> 
 ### The goal for the project
 -  This project aims to create software that analyzes data using PyCharm.
 ### The specific issue or challenge it addresses
@@ -27,7 +27,7 @@ If you have any questions about this project, you can email us.
 - You can view the error flag analyzed in the program through the xlsx file, and you can view the graph analyzed with the data as a picture.
 
 ---
-# Program Functions <a id="Program-Functions"></a> 
+# 📌Program Functions <a id="Program-Functions"></a> 
 
 This section outlines the main functions and features of the program. It provides a detailed description of what the program does and how it performs its tasks. Key features may include:
 
@@ -36,7 +36,7 @@ This section outlines the main functions and features of the program. It provide
 - Any special capabilities or tools integrated into the program
 
 ---
-# How to use <a id="How-to-use"></a> 
+# 📌How to use <a id="How-to-use"></a> 
 <h3> The code below is an example code for run.py.</h3> 
 
 ```python 
@@ -79,11 +79,11 @@ The example code is set to 'True'.
 
 <h3>2. When data analysis is finished by running run.py , 'Data analysis is complete.' will appear.</h3>
 <h3>3. You can check the data analyzed in the 'res' file.</h3>
-- Data is stored in a file with the date and time of analysis as the name. The analyzed data can be accumulated.<br>
-- In the 'res' file, the picture of the graph is stored with the same name as the data file.<br>
-- The xlsx file stores the data frame.<br>
-You can check the information in the list below on xlsx.
-    >'Lot, Wafer, Mask, TestSite, Name, Date, Script ID, Script Version, Script Owner, Operator, Row, Column, ErrorFlag, Error description, Analysis Wavelength, Rsq of Ref. spectrum (Nth), Max transmission of Ref. spec. (dB), Rsq of IV, I at -1V [A], I at 1V [A], Graph Image'.
+  - Data is stored in a file with the date and time of analysis as the name. The analyzed data can be accumulated.<br>
+  - In the 'res' file, the picture of the graph is stored with the same name as the data file.<br>
+  - The xlsx file stores the data frame.<br>
+  - You can check the information in the list below on xlsx.
+    >    'Lot, Wafer, Mask, TestSite, Name, Date, Script ID, Script Version, Script Owner, Operator, Row, Column, ErrorFlag, Error description, Analysis Wavelength, Rsq of Ref. spectrum (Nth), Max transmission of Ref. spec. (dB), Rsq of IV, I at -1V [A], I at 1V [A], Graph Image'.
 
 
 <h3> 4. You open the analyzed xlsx file and check the data. </h3>
@@ -95,6 +95,6 @@ You can check the information in the list below on xlsx.
   - 2: The IV fitting graph has an error.
 
 ---
-# Example photos from analysis results <a id="Example-photos-from-analysis-results"></a> 
+# 📌Example photos from analysis results <a id="Example-photos-from-analysis-results"></a> 
 [Graph Image]()
 [xlsx Image]()
