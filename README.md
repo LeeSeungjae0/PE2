@@ -2,7 +2,7 @@
 
 ---
 # Index 
-[Who made](#Who made)<br>
+[Who made](#Who-made)<br>
 [Background Description](#Background-Description)<br>
 [Program Functions](#Program-Functions)<br>
 [How to use](#How-to-use)<br>
