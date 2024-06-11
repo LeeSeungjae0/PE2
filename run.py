@@ -14,3 +14,5 @@ save_graph_image = True              # True or False
 if __name__ == "__main__":
     current_directory = os.getcwd()
     setting(lot, wafer_number, measurement_date, current_directory, testsite, save_xlsx_file, save_graph_image)
+
+print('Data analysis is complete.')
