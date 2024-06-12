@@ -11,7 +11,7 @@
 ---
 # 📌Who made <a id="Who made"></a> 
 
-- Dongmin Seo :
+- Dongmin Seo : tjehdals@hanyang.ac.kr
 - Lina Kim : flfsks4242@hanyang.ac.kr
 - Seungjae Lee : dkseho4186@hanyang.ac.kr
 - Youngwoong Son :

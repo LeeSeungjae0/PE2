@@ -3,7 +3,7 @@ from main import main
 from data_Frame import create_data_frame, save_data_frame
 from datetime import datetime
 
-def setting(directory0, directory1, directory2, current_directory, testsite, xlsx_file, graph_image):
+def set_up(directory0, directory1, directory2, current_directory, testsite, xlsx_file, graph_image):
     base_directory = os.path.join(current_directory, 'dat', directory0)
     data_dict = create_data_frame()
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
