@@ -13,7 +13,7 @@
 
 - Dongmin Seo :
 - Lina Kim : flfsks4242@hanyang.ac.kr
-- Seungjae Lee :
+- Seungjae Lee : [dkseho4186@hanyang.ac.kr](mailto:dkseho4186@hanyang.ac.kr)
 - Youngwoong Son :
 
 If you have any questions about this project, you can email us.
