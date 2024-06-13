@@ -39,3 +39,4 @@ def set_up(directory0, directory1, directory2, current_directory, testsite, xlsx
         os.makedirs(output_directory, exist_ok=True)
         xlsx_file_path = os.path.join(output_directory, f'analysis_result.xlsx')
         save_data_frame(data_dict, xlsx_file_path)
+    print('Data analysis is complete.')
