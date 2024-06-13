@@ -1,17 +1,15 @@
 import os
 import matplotlib.pyplot as plt
-from Parsing import parse_xml_files
-from I_V import process_iv_data
-from Transmission import process_transmission_data
-from Reference import extract_reference_data
-from Flat_transmission import process_flat_transmission
-from Data_Frame import update_data_frame
-from Plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
+from parsing import parse_xml_files
+from iv import process_iv_data
+from transmission import process_transmission_data
+from reference import extract_reference_data
+from data_Frame import update_data_frame
+from plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
 from linear import linear
-from datetime import datetime
 
 def main(directory0, directory1, directory2, current_directory, data_dict, testsite, graph_image, timestamp):
-    xml_files, _, xml_directory = parse_xml_files(directory0, directory1, directory2, current_directory,testsite)
+    xml_files, xml_directory = parse_xml_files(directory0, directory1, directory2, current_directory,testsite)
     if xml_files is None:
         print("Failed to parse XML files. Please check the directory paths and try again.")
         return
@@ -21,7 +19,7 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
         transmissions = process_transmission_data(root)
         reference_wave, reference_trans = extract_reference_data(root)
 
-        fig, axs = plt.subplots(2, 4, figsize=(18, 8))
+        fig, axs = plt.subplots(2, 4, figsize=(20, 8))
 
         plot_iv(axs[0, 3], voltage_values, abs_current, final, R_squared, current_values)
         ref_transmission_point = plot_transmission(axs[0, 0], transmissions)
@@ -52,4 +50,3 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
             plt.savefig(image_path, dpi=300, bbox_inches='tight')
             plt.close(fig)
         print('---', filename, '---')
-    return timestamp

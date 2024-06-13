@@ -1,18 +1,14 @@
-import xml.etree.ElementTree as eT
 import numpy as np
-import matplotlib.pyplot as plt
 from lmfit import Model
 from decimal import Decimal
-
-from Transmission import process_transmission_data
-from Flat_transmission import process_flat_transmission
-from Reference import extract_reference_data
 
 def r_squared(y_true, y_pred):
     y_mean = np.mean(y_true)
     tss = np.sum((y_true - y_mean) ** 2)
     rss = np.sum((y_true - y_pred) ** 2)
-    r2 = Decimal(1) - (Decimal(rss) / Decimal(tss))
+    if tss == 0:
+        return 1 if rss == 0 else 0
+    r2 = 1 - (Decimal(rss) / Decimal(tss))
     return r2
 
 # ax1: 데이터 선형화, ax2: 근사, ax3: 근사화 모둠, ax4: delta neff
@@ -27,16 +23,17 @@ def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     linear_0 = 10 ** (flat_meas_trans[4] / 10) * 0.0005
     linear_0_dot_5 = 10 ** (flat_meas_trans[5] / 10) * 0.0005
 
-    ax1.scatter(wavelength_array[0], linear_minus_2, s=1, label='Measured -2V')
-    ax1.scatter(wavelength_array[1], linear_minus_1_dot_5, s=1, label='Measured -1.5V')
-    ax1.scatter(wavelength_array[2], linear_minus_1, s=1, label='Measured -1V')
-    ax1.scatter(wavelength_array[3], linear_minus_0_dot_5, s=1, label='Measured -0.5V')
-    ax1.scatter(wavelength_array[4], linear_0, s=1, label='Measured 0.0V')
-    ax1.scatter(wavelength_array[5], linear_0_dot_5, s=1, label='Measured 0.5V')
+    ax1.plot(wavelength_array[0], linear_minus_2, label='-2.0V')
+    ax1.plot(wavelength_array[1], linear_minus_1_dot_5, label='-1.5V')
+    ax1.plot(wavelength_array[2], linear_minus_1, label='-1.0V')
+    ax1.plot(wavelength_array[3], linear_minus_0_dot_5, label='-0.5V')
+    ax1.plot(wavelength_array[4], linear_0, label='0.0V')
+    ax1.plot(wavelength_array[5], linear_0_dot_5, label='0.5V')
     ax1.set_xlabel('Wavelength [nm]')
     ax1.set_ylabel('Intensity')
     ax1.set_title('Flat transmission spectra - linear')
-    ax1.legend(loc='lower center', ncol=2, fontsize='small')
+    ax1.grid(True)
+    ax1.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
 
     def intensity(lamda, neff, delta, l, deltaL, I0):
         I = I0 * np.sin(((2 * np.pi / lamda) * deltaL * neff) / 2 + ((2 * np.pi / lamda) * l * delta / 2)) ** 2
@@ -61,13 +58,13 @@ def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     neff_value = result.params['neff'].value
 
     # 결과 시각화
-    ax2.scatter(wavelength_array[4], linear_0, s=5, label='Measured 0.0V')
-    ax2.plot(wavelength_array[4], result.best_fit, label='Fitted 0.0V', color='red')
-
+    ax2.scatter(wavelength_array[4], linear_0, s=5, label='data')
+    ax2.plot(wavelength_array[4], result.best_fit, label='fit', color='red')
     ax2.set_xlabel('Wavelength [nm]')
     ax2.set_ylabel('Intensity')
-    ax2.set_title('Flat transmission spectra - fitted')
-    ax2.legend(loc='lower center', ncol=2, fontsize='small')
+    ax2.set_title('Flat transmission spectra - fitted 0.0V')
+    ax2.grid(True)
+    ax2.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
 
     delta_n = []
     # 모델 생성
@@ -120,24 +117,33 @@ def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     delta_n.append(delta_neff_value)
 
     # 결과 시각화
-    ax3.plot(wavelength_array[0], result2.best_fit, label='Fitted -2V')
-    ax3.plot(wavelength_array[1], result3.best_fit, label='Fitted -1.5V')
-    ax3.plot(wavelength_array[2], result4.best_fit, label='Fitted -1V')
-    ax3.plot(wavelength_array[3], result5.best_fit, label='Fitted -0.5V')
-    ax3.plot(wavelength_array[4], result6.best_fit, label='Fitted 0V')
-    ax3.plot(wavelength_array[5], result7.best_fit, label='Fitted 0.5V')
+    ax3.plot(wavelength_array[0], result2.best_fit, label='-2.0V')
+    ax3.plot(wavelength_array[1], result3.best_fit, label='-1.5V')
+    ax3.plot(wavelength_array[2], result4.best_fit, label='-1.0V')
+    ax3.plot(wavelength_array[3], result5.best_fit, label='-0.5V')
+    ax3.plot(wavelength_array[4], result6.best_fit, label='0.0V')
+    ax3.plot(wavelength_array[5], result7.best_fit, label='0.5V')
 
     ax3.set_xlabel('Wavelength [nm]')
     ax3.set_ylabel('Intensity')
     ax3.set_title('Flat transmission spectra - fitted')
-    ax3.legend(loc='lower center', ncol=2, fontsize='small')
+    ax3.grid(True)
+    ax3.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
 
-    voltage = [-2, -1.5, -1, -0.5, 0, 0.5]
+    voltage = [-2.0, -1.5, -1.0, -0.5, 0.0, 0.5]
+    x = np.arange(len(delta_n))
+    coefficients = np.polyfit(x, delta_n, 2)
+    polynomial = np.poly1d(coefficients)
+    y_fit = polynomial(x)
+    r2=r_squared(delta_n,y_fit)
 
-    ax4.plot(voltage, delta_n, label='delta', color='red')
-    ax4.set_xlabel('Voltage')
+    ax4.scatter(voltage, delta_n, label='delta')
+    ax4.plot(voltage, y_fit, 'r-', label=f'fit (R²: {r2:.4f})')
+    ax4.set_xlabel('Voltage(V)')
     ax4.set_ylabel('delta_n')
     ax4.set_title('Delta n_eff')
+    ax4.grid(True)
+    ax4.legend(loc='upper right')
 
     r2_linear.append(r2_2)      # fitted 0V
     r2_linear.append(r2_3)      # -2V
@@ -148,40 +154,3 @@ def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     r2_linear.append(r2_8)      # 0.5V
 
     return r2_linear
-
-def plot_reference( reference_wave, reference_trans, r_squared_values):
-
-    degrees = range(1, 7)
-    max_transmission = np.max(reference_trans)
-    min_transmission = np.min(reference_trans)
-    y_pos = 0.5 * (max_transmission + min_transmission) - 0.3
-    x_pos = reference_wave[0] + 0.5 * (reference_wave[-1] - reference_wave[0])
-    best_r = 0
-    for degree in degrees:
-        coeffs, _, _, _ = np.linalg.lstsq(np.vander(reference_wave, degree + 1), reference_trans, rcond=None)
-        polynomial1 = np.poly1d(coeffs)
-
-        mean_transmission = np.mean(reference_trans)
-        total_variation = np.sum((reference_trans - mean_transmission) ** 2)
-        residuals = np.sum((reference_trans - polynomial1(reference_wave)) ** 2)
-        r_squared = 1 - (residuals / total_variation)
-        r_squared_values[degree] = r_squared
-
-        y_pos -= 0.06 * (max_transmission - min_transmission)
-        if best_r<=r_squared:
-            best_r = r_squared
-            polynomial = polynomial1
-    return polynomial
-
-#tree = eT.parse(r'C:\Users\User\PycharmProjects\pythonProject1\PE2\dat\HY202103\D08\20190712_113254\HY202103_D08_(2,-1)_LION1_DCM_LMZC.xml')
-#root = tree.getroot()
-#reference_wave, reference_trans = extract_reference_data(root)
-#r_squared_values = {}
-#polynomial = plot_reference( reference_wave, reference_trans, r_squared_values)
-#transmissions = process_transmission_data(root)
-#wavelength_array, flat_meas_trans = process_flat_transmission(transmissions, polynomial)
-##test
-#fig, axs = plt.subplots(1, 4, figsize=(16,4))
-#linear(axs[0], axs[1], axs[2], axs[3], wavelength_array, flat_meas_trans)
-#plt.tight_layout()
-#plt.show()
