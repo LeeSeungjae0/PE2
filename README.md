@@ -37,13 +37,17 @@ This section outlines the main functions and features of the program. It provide
 
 ---
 # 📌How to use <a id="How-to-use"></a> 
+<h3> Before using run.py, install required packages.</h3> 
+By typing "pip install -r requirements.txt" on the terminal, you can install all packages
+
+
 <h3> The code below is an example code for run.py.</h3> 
 
 ```python 
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
-from setting import setting
+from setting import set_up
 
 lot = 'HY202103'
 wafer_number = 'all'                 # 'D07', 'D08', 'D23', 'D24', 'all'
