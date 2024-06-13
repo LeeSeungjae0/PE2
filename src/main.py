@@ -6,7 +6,7 @@ from transmission import process_transmission_data
 from reference import extract_reference_data
 from data_Frame import update_data_frame
 from plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
-from linear import linear
+from linear import make_linear
 
 def main(directory0, directory1, directory2, current_directory, data_dict, testsite, graph_image, timestamp):
     xml_files, xml_directory = parse_xml_files(directory0, directory1, directory2, current_directory,testsite)
@@ -26,7 +26,7 @@ def main(directory0, directory1, directory2, current_directory, data_dict, tests
         r_squared_values = {}
         polynomial = plot_reference(axs[0, 1], reference_wave, reference_trans, r_squared_values)
         wavelength_array, flat_meas_trans = plot_flat_transmission(axs[0, 2], transmissions, polynomial)
-        linear(axs[1, 0], axs[1, 1], axs[1, 2], axs[1, 3], wavelength_array, flat_meas_trans)
+        make_linear(axs[1, 0], axs[1, 1], axs[1, 2], axs[1, 3], wavelength_array, flat_meas_trans)
         data_dict = update_data_frame(data_dict, root, r_squared_values[6], ref_transmission_point, R_squared,
                                       current_values, voltage_values, abs_current, transmissions)
 
