@@ -14,7 +14,7 @@
 - Dongmin Seo : tjehdals@hanyang.ac.kr
 - Lina Kim : flfsks4242@hanyang.ac.kr
 - Seungjae Lee : dkseho4186@hanyang.ac.kr
-- Youngwoong Son :
+- Youngwoong Son : ericson2001@hanyang.ac.kr
 
 If you have any questions about this project, you can email us.
 
