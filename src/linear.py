@@ -12,7 +12,7 @@ def r_squared(y_true, y_pred):
     return r2
 
 # ax1: 데이터 선형화, ax2: 근사, ax3: 근사화 모둠, ax4: delta neff
-def linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
+def make_linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     # 선형 전력 변환
     r2_linear = []
 
