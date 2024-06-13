@@ -4,7 +4,6 @@
 # 📌Index 
 [Who made](#Who-made)<br>
 [Background Description](#Background-Description)<br>
-[Program Functions](#Program-Functions)<br>
 [How to use](#How-to-use)<br>
 [Example Result Photos](#Example-photos-from-analysis-results)
 
@@ -25,15 +24,6 @@ If you have any questions about this project, you can email us.
 ### The specific issue or challenge it addresses
 - If you write the desired lot number and wafer number on run.py , the data is analyzed, and the analyzed graph and data frame are stored to provide you with an xlsx file. 
 - You can view the error flag analyzed in the program through the xlsx file, and you can view the graph analyzed with the data as a picture.
-
----
-# 📌Program Functions <a id="Program-Functions"></a> 
-
-This section outlines the main functions and features of the program. It provides a detailed description of what the program does and how it performs its tasks. Key features may include:
-
-- Core functionality
-- Additional features
-- Any special capabilities or tools integrated into the program
 
 ---
 # 📌How to use <a id="How-to-use"></a> 
