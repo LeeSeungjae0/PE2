@@ -1,4 +1,4 @@
-import xml.etree.ElementTree as elemTree
+import xml.etree.ElementTree as eT
 import os
 
 def parse_xml_files(directory0, directory1, directory2, current_directory, teststie):
@@ -11,7 +11,7 @@ def parse_xml_files(directory0, directory1, directory2, current_directory, tests
     for filename in os.listdir(xml_directory):
         if any(filename.endswith(f'{site}.xml') for site in teststie):
             xml_file_path = os.path.join(xml_directory, filename)
-            tree = elemTree.parse(xml_file_path)
+            tree = eT.parse(xml_file_path)
             root = tree.getroot()
             xml_files.append((filename, root))
 
