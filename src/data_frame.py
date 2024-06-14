@@ -68,8 +68,6 @@ def save_data_frame(data_dict, xlsx_file_path):
     # Calculate total number of entries for each wafer and test site
     total_counts_all = df.groupby(['Wafer', 'TestSite'])['ErrorFlag'].count()
 
-    # Calculate error rate for each wafer and test site, including all entries
-    error_rate_all = (error_counts / total_counts_all) * 100
 
     # Get detailed error descriptions distribution for each wafer and test site
     error_descriptions = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite', 'Error description']).size()
@@ -78,7 +76,7 @@ def save_data_frame(data_dict, xlsx_file_path):
     summary_df = pd.DataFrame({
         'Total Errors': error_counts,
         'Total Entries': total_counts_all,
-        'Error Rate (%)': error_rate_all
+
     }).reset_index()
 
     # Filter the original DataFrame to include only rows where ErrorFlag is not '0'
