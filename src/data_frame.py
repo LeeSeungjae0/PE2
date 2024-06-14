@@ -61,15 +61,11 @@ def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squa
 
 def save_data_frame(data_dict, xlsx_file_path):
     df = pd.DataFrame(data_dict)
-    
-    # ErrorFlag 열의 값이 문자열 '0'인 경우를 포함하여 필터링
+
     error_counts = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite'])['ErrorFlag'].count()
 
-    # Calculate total number of entries for each wafer and test site
     total_counts_all = df.groupby(['Wafer', 'TestSite'])['ErrorFlag'].count()
 
-
-    # Get detailed error descriptions distribution for each wafer and test site
     error_descriptions = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite', 'Error description']).size()
 
     # Create a summary DataFrame
@@ -79,7 +75,6 @@ def save_data_frame(data_dict, xlsx_file_path):
 
     }).reset_index()
 
-    # Filter the original DataFrame to include only rows where ErrorFlag is not '0'
     errors_only_df = df[df['ErrorFlag'] != '0']
 
     with pd.ExcelWriter(xlsx_file_path, engine='openpyxl') as writer:
@@ -87,9 +82,7 @@ def save_data_frame(data_dict, xlsx_file_path):
 
         summary_df.to_excel(writer, sheet_name='Summary', index=False)
 
-        # Write the detailed error descriptions to the second sheet
         error_descriptions = error_descriptions.reset_index(name='Count')
         error_descriptions.to_excel(writer, sheet_name='Error Descriptions', index=False)
 
-        # Write the errors-only DataFrame to a third sheet
         errors_only_df.to_excel(writer, sheet_name='Errors Only', index=False)
