@@ -4,7 +4,7 @@ from parsing import parse_xml_files
 from iv import process_iv_data
 from transmission import process_transmission_data
 from reference import extract_reference_data
-from data_Frame import update_data_frame
+from data_frame import update_data_frame
 from plot import plot_iv, plot_transmission, plot_reference, plot_flat_transmission
 from linear import make_linear
 
