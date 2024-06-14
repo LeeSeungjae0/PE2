@@ -61,5 +61,3 @@ def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squa
 
 def save_data_frame(data_dict, xlsx_file_path):
     df = pd.DataFrame(data_dict)
-    with pd.ExcelWriter(xlsx_file_path, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name='Sheet1')
