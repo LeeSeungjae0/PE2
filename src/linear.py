@@ -11,9 +11,9 @@ def r_squared(y_true, y_pred):
     r2 = 1 - (Decimal(rss) / Decimal(tss))
     return r2
 
-# ax1: 데이터 선형화, ax2: 근사, ax3: 근사화 모둠, ax4: delta neff
+# ax1: data-linear, ax2: fitting, ax3: fitting_all, ax4: delta neff
 def make_linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
-    # 선형 전력 변환
+
     r2_linear = []
 
     linear_minus_2 = 10 ** (flat_meas_trans[0] / 10) * 0.0005
@@ -39,10 +39,9 @@ def make_linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
         I = I0 * np.sin(((2 * np.pi / lamda) * deltaL * neff) / 2 + ((2 * np.pi / lamda) * l * delta / 2)) ** 2
         return I
 
-    # 모델 생성
     model = Model(intensity)
 
-    # 파라미터 설정
+
     params = model.make_params(neff=4.1, delta=0, l=500 * (10 ** -6), deltaL=40 * (10 ** -6), I0=0.0005)
     params['delta'].vary = False
     params['l'].vary = False
@@ -51,13 +50,13 @@ def make_linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     params['neff'].vary = True
 
     x_nm = wavelength_array * (10 ** -9)
-    # 피팅 수행
+
     result = model.fit(linear_0, params, lamda=x_nm[4])
 
     r2_2 = r_squared(linear_0, result.best_fit)
     neff_value = result.params['neff'].value
 
-    # 결과 시각화
+
     ax2.scatter(wavelength_array[4], linear_0, s=5, label='data')
     ax2.plot(wavelength_array[4], result.best_fit, label='fit', color='red')
     ax2.set_xlabel('Wavelength (nm)')
@@ -67,18 +66,15 @@ def make_linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     ax2.legend(loc='lower right', bbox_to_anchor=(1.3, 0.47))
 
     delta_n = []
-    # 모델 생성
+
     model2 = Model(intensity)
 
-    # 파라미터 설정
     params = model2.make_params(neff=neff_value, delta=0, l=500 * (10 ** -6), deltaL=40 * (10 ** -6), I0=0.0005)
     params['delta'].vary = True
     params['l'].vary = False
     params['deltaL'].vary = False
     params['I0'].vary = False
     params['neff'].vary = False
-
-    # 피팅 수행
 
     # -2V
     result2 = model2.fit(linear_minus_2, params, lamda=x_nm[0])
@@ -116,7 +112,6 @@ def make_linear(ax1, ax2, ax3, ax4, wavelength_array, flat_meas_trans):
     delta_neff_value = result7.params['delta'].value
     delta_n.append(delta_neff_value)
 
-    # 결과 시각화
     ax3.plot(wavelength_array[0], result2.best_fit, label='-2.0V')
     ax3.plot(wavelength_array[1], result3.best_fit, label='-1.5V')
     ax3.plot(wavelength_array[2], result4.best_fit, label='-1.0V')
