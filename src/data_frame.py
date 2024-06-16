@@ -62,11 +62,11 @@ def update_data_frame(data_dict, root, r_squared, ref_transmission_point, R_squa
 def save_data_frame(data_dict, xlsx_file_path):
     df = pd.DataFrame(data_dict)
     df['Date'] = pd.to_datetime(df['Date']).dt.date
-    error_counts = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite', 'Date'])['ErrorFlag'].count()
+    error_counts = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite'])['ErrorFlag'].count()
 
-    total_counts_all = df.groupby(['Wafer', 'TestSite', 'Date'])['ErrorFlag'].count()
+    total_counts_all = df.groupby(['Wafer', 'TestSite'])['ErrorFlag'].count()
 
-    error_descriptions = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite', 'Date', 'Error description']).size()
+    error_descriptions = df[df['ErrorFlag'] != '0'].groupby(['Wafer', 'TestSite', 'Error description']).size()
 
     # Create a summary DataFrame
     summary_df = pd.DataFrame({
