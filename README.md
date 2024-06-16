@@ -27,8 +27,17 @@ If you have any questions about this project, you can email us.
 
 ---
 # 📌How to use <a id="How-to-use"></a> 
-<h3> Before using run.py, install required packages.</h3> 
-By typing "pip install -r requirements.txt" on the terminal, you can install all packages
+### Package Installation
+
+Before using `run.py`, ensure you have installed the required packages:
+
+**Install Required Packages:**
+   - Open your terminal or command prompt.
+   - Navigate to your project directory.
+   - Run the following command to install dependencies from `requirements.txt`:
+     ```
+     pip install -r requirements.txt
+     ```
 
 
 <h3> The code below is an example code for run.py.</h3> 
@@ -86,7 +95,7 @@ The example code is set to 'True'.
 - You can see the graph by double-clicking the link in 'Graph Image'.<br>
 - Each error flag means :  <br>
   - 0 : No error <br>
-  - 1: Error in reference spectrum. <br>
+  - 1: Error of R^2. <br>
   - 2: The IV fitting graph has an error.
 
 ---
